@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "echo 'run linter!'",
     "validate": "node .jscs.js",
-    "test": "grunt test"
+    "test": "echo '(please defined tests)'"
   },
   "author": "",
   "license": "MIT",
