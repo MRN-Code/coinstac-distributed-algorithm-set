@@ -3,7 +3,8 @@ global.coinslog = function(arg) {
 };
 
 var n = require('numeric');
-var oneShotRegression = require('./lib/one-shot-regression.js');
+var oneShotRegression = require('./index.js').oneShotRegression;
+var laplace = require('./index.js').laplace;
 
 // test some input/output!
 var dummyROIs = [
@@ -25,3 +26,19 @@ coinslog('minimized oneShotRegression.objective');
 coinslog(minimized);
 coinslog('re-applied oneShotRegression.objective');
 coinslog(oneShotRegression.objective(minimized, dummyROIs, response));
+
+coinslog('Laplace Noise with scale of 1');
+coinslog(laplace.noise(1));
+
+coinslog('Laplace Noise with scale of 100');
+coinslog(laplace.noise(100));
+
+coinslog('Laplace Noise with scale of 1000');
+coinslog(laplace.noise(1000));
+
+
+coinslog('Inverse Laplace Transform of 0');
+coinslog(laplace.inverse(0,1,0));
+
+coinslog('Inverse Laplace Transform of 0.2');
+coinslog(laplace.inverse(0.2,1,0));
