@@ -3,7 +3,7 @@
 ## usage
 - clone this repo `git clone git@github.com:MRN-Code/coinstac-distributed-algorithm-set.git`
 - cd to the folder and run `npm i` to install js depedencies
-- run `node index.js` to exec the script
+- run `node example.js` to exec the script
 
 ## debugging
 You may find the nodejs debugger useful.  GUI debuggers exist, such as [node-inspector](https://github.com/node-inspector/node-inspector), although it is generally more performant and reliable to use the cmd line debugger. To debug a script, run `npm debug yourScript.js`.  A cheat sheet for the debugger can be [found here](https://nodejs.org/api/debugger.html#debugger_commands_reference).  Remember, to inspect variables, you _must_ enter into the REPL by typing `repl` then `enter`.  `Control+c` to exit the repl and resume navigating your code.
