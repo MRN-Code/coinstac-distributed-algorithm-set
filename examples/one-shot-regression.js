@@ -15,29 +15,29 @@ var dummyROIs = [
     [2, 4, 3],
     [1, 2, 3],
 ];
-var response = [-1, 1, 1, -1];
+var response = [-1, 1, 1, -1]; //+1 = patient -1 = control
 var regressor = [1, 1, 1];
 
-var zcResponse = utils.zeroCenter(response);
+var normalizedResponse = utils.normalize(response);
 global.coinslog('zero-centered response');
-global.coinslog(zcResponse);
+global.coinslog(normalizedResponse);
 
-var zcROIs = utils.zeroCenter(dummyROIs);
+var normalizedROIs = utils.normalize(dummyROIs);
 global.coinslog('zero-centered ROIs');
-global.coinslog(zcROIs);
+global.coinslog(normalizedROIs);
 
 global.coinslog('oneShotRegression.objective');
-global.coinslog(oneShotRegression.objective(regressor, zcROIs, zcResponse));
+global.coinslog(oneShotRegression.objective(regressor, normalizedROIs, normalizedResponse));
 
-var minimized = oneShotRegression.minimize(regressor, zcROIs, zcResponse);
+var minimized = oneShotRegression.minimize(regressor, normalizedROIs, normalizedResponse);
 global.coinslog('minimized oneShotRegression.objective');
 global.coinslog(minimized);
 
-var predictions = oneShotRegression.applyModel(minimized, zcROIs);
+var predictions = oneShotRegression.applyModel(minimized, normalizedROIs);
 global.coinslog('predicted values');
 global.coinslog(predictions);
 
-var r2 = utils.r2(zcResponse, predictions);
+var r2 = utils.r2(normalizedResponse, predictions);
 global.coinslog('coefficient of determination (r^2)');
 global.coinslog(r2);
 
