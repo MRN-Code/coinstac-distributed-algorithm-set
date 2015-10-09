@@ -4,7 +4,7 @@ global.coinslog = function(arg) {
     return typeof arg === 'object' ? console.dir(arg) : console.log(arg);
 };
 
-var oneShotRegression = require('./../index.js').oneShotRegression;
+var osr = require('./../index.js').oneShotRegression;
 var laplace = require('./../index.js').laplace;
 var utils = require('./../index.js').utils;
 
@@ -15,35 +15,32 @@ var dummyROIs = [
     [2, 4, 3],
     [1, 2, 3],
 ];
-var response = [-1, 1, 1, -1]; //+1 = patient -1 = control
-var regressor = [1, 1, 1];
-
-var normalizedResponse = utils.normalize(response);
-global.coinslog('zero-centered response');
-global.coinslog(normalizedResponse);
+var subjectTypes = [-1, 1, 1, -1]; //+1 = patient -1 = control
+var initialCoefficients = [1, 1, 1];
 
 var normalizedROIs = utils.normalize(dummyROIs);
 global.coinslog('zero-centered ROIs');
 global.coinslog(normalizedROIs);
 
-global.coinslog('oneShotRegression.objective');
-global.coinslog(oneShotRegression.objective(regressor, normalizedROIs, normalizedResponse));
-
-var minimized = oneShotRegression.minimize(regressor, normalizedROIs, normalizedResponse);
-global.coinslog('minimized oneShotRegression.objective');
+var minimized = osr.minimize(
+    initialCoefficients,
+    normalizedROIs,
+    subjectTypes
+);
+global.coinslog('minimized osr');
 global.coinslog(minimized);
 
-var predictions = oneShotRegression.applyModel(minimized, normalizedROIs);
+var predictedSubjectTypes = osr.applyModel(minimized, normalizedROIs);
 global.coinslog('predicted values');
-global.coinslog(predictions);
+global.coinslog(predictedSubjectTypes);
 
-var r2 = utils.r2(normalizedResponse, predictions);
+var r2 = utils.r2(subjectTypes, predictedSubjectTypes);
 global.coinslog('coefficient of determination (r^2)');
 global.coinslog(r2);
 
 /*
-global.coinslog('re-applied oneShotRegression.objective');
-global.coinslog(oneShotRegression.objective(minimized, dummyROIs, response));
+global.coinslog('re-applied osr.objective');
+global.coinslog(osr.objective(minimized, dummyROIs, response));
 
 global.coinslog('Laplace Noise with scale of 1');
 global.coinslog(laplace.noise(1));
