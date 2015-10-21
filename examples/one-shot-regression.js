@@ -4,33 +4,42 @@ global.coinslog = function(arg) {
     return typeof arg === 'object' ? console.dir(arg) : console.log(arg);
 };
 
-var osr = require('./../index.js').oneShotRegression;
+var rr = require('./../index.js').ridgeRegression;
 var laplace = require('./../index.js').laplace;
 var utils = require('./../index.js').utils;
 
 // test some input/output!
 var dummyROIs = [
-    [1, 2, 3],
-    [2, 4, 3],
-    [2, 4, 3],
-    [1, 2, 3],
+    [-428.14999999999964],
+    [-200.8499999999999],
+    [71.65000000000009],
+    [557.3499999999999]
 ];
-var subjectTypes = [-1, 1, 1, -1]; //+1 = patient -1 = control
-var initialCoefficients = [1, 1, 1];
+var subjectTypes = [1, 1, -1, -1]; //+1 = patient -1 = control
+var initialCoefficients = [0.23186233500018716];
 
 var normalizedROIs = utils.normalize(dummyROIs);
 global.coinslog('zero-centered ROIs');
 global.coinslog(normalizedROIs);
 
-var minimized = osr.minimize(
+var gradients = rr.gradient(
     initialCoefficients,
     normalizedROIs,
     subjectTypes
 );
-global.coinslog('minimized osr');
+
+global.coinslog('gradient');
+global.coinslog(gradients);
+
+var minimized = rr.oneShot(
+    initialCoefficients,
+    normalizedROIs,
+    subjectTypes
+);
+global.coinslog('minimized rr');
 global.coinslog(minimized);
 
-var predictedSubjectTypes = osr.applyModel(minimized, normalizedROIs);
+var predictedSubjectTypes = rr.applyModel(minimized, normalizedROIs);
 global.coinslog('predicted values');
 global.coinslog(predictedSubjectTypes);
 
@@ -39,8 +48,8 @@ global.coinslog('coefficient of determination (r^2)');
 global.coinslog(r2);
 
 /*
-global.coinslog('re-applied osr.objective');
-global.coinslog(osr.objective(minimized, dummyROIs, response));
+global.coinslog('re-applied rr.objective');
+global.coinslog(rr.objective(minimized, dummyROIs, response));
 
 global.coinslog('Laplace Noise with scale of 1');
 global.coinslog(laplace.noise(1));
